@@ -26,5 +26,8 @@ public abstract class NewRoadEvent extends Event{
 	void execute(RoadMap map) {
 		map.addRoad(CreateRoad( map));
 	}
-
+	@Override
+	public String toString() {
+	return "New Road '"+id+"'";
+	}
 }
