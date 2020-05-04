@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="TrafficSimulator/TrafficSimulatorTP/src"/>
+	<classpathentry kind="src" path="TrafficSimulatorTP/src"/>
+	<classpathentry kind="lib" path="TrafficSimulator/TrafficSimulatorTP/lib/commons-cli-1.4.jar"/>
+	<classpathentry kind="lib" path="TrafficSimulator/TrafficSimulatorTP/lib/json.jar"/>
+	<classpathentry kind="lib" path="TrafficSimulatorTP/lib/commons-cli-1.4.jar"/>
+	<classpathentry kind="lib" path="TrafficSimulatorTP/lib/json.jar"/>
+	<classpathentry kind="output" path="TrafficSimulatorTP/bin"/>
+</classpath>

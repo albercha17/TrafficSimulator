@@ -4,25 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
-
+// mirar el onError
 public class TrafficSimulator implements Observable<TrafficSimObserver>{
  
     private RoadMap MapaCarreteras;
     private List<Event> ListaEventos;
     private int TiempoSimulacion;
-
+    private List<TrafficSimObserver> listOb;
 
 public TrafficSimulator() {
 	TiempoSimulacion=0;
 	MapaCarreteras=new RoadMap();
 	ListaEventos= new ArrayList<Event>();
+	listOb= new ArrayList<TrafficSimObserver>();
 }
 public void addEvent(Event e) {
 	ListaEventos.add(e);
+	for(TrafficSimObserver i : listOb) {
+		i.onEventAdded(MapaCarreteras, ListaEventos, e, TiempoSimulacion);
+	}
 }
 
 public void advance() {
 	TiempoSimulacion++;
+	for(TrafficSimObserver i : listOb) {
+		i.onAdvanceStart(MapaCarreteras, ListaEventos, TiempoSimulacion);
+	}
 	for(int i=0; i<ListaEventos.size();i++) {
 		if(ListaEventos.get(i).getTime()==TiempoSimulacion) {
 			ListaEventos.get(i).execute(MapaCarreteras);
@@ -40,12 +47,18 @@ public void advance() {
 	for(int y=0; y<MapaCarreteras.getRoads().size();y++) {
 		MapaCarreteras.getRoads().get(y).advance(TiempoSimulacion);
 	}
+	for(TrafficSimObserver i : listOb) {
+		i.onAdvanceEnd(MapaCarreteras, ListaEventos, TiempoSimulacion);
+	}
 }
 
 public void reset() {
 	TiempoSimulacion=0;
 	MapaCarreteras=null;
 	ListaEventos.clear();
+	for(TrafficSimObserver i : listOb) {
+		i.onReset(MapaCarreteras, ListaEventos, TiempoSimulacion);
+	}
 }
 
 public JSONObject report() {
@@ -56,12 +69,14 @@ return jo;
 }
 @Override
 public void addObserver(TrafficSimObserver o) {
-	// TODO Auto-generated method stub
+	listOb.add(o);
+	for(TrafficSimObserver i : listOb) {
+		i.onRegister(MapaCarreteras, ListaEventos, TiempoSimulacion);
+	}
 	
 }
 @Override
 public void removeObserver(TrafficSimObserver o) {
-	// TODO Auto-generated method stub
-	
+	listOb.remove(o);
 }
 }
