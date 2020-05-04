@@ -26,4 +26,8 @@ public class NewSetContClassEvent extends Event{
 			map.getVehicle(cs.get(i).getFirst()).setContaminationClass(cs.get(i).getSecond());
 		}
 	}
+	@Override
+	public String toString() {
+	return "New SetContClass ";
+	}
 	}
