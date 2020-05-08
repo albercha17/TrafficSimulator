@@ -2,6 +2,11 @@ package simulator.view;
 
 import javax.swing.JDialog;
 
-public class ChangeCO2ClassDialog extends JDialog{
+import simulator.control.Controller;
 
+public class ChangeCO2ClassDialog extends JDialog{
+	Controller ctr;
+	ChangeCO2ClassDialog(Controller ctr){
+		this.ctr=ctr;
+	}
 }
