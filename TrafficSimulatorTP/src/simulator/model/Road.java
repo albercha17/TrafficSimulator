@@ -58,8 +58,20 @@ protected Junction getFin() {
 protected Junction getini() {
 	return origen;
 }
-	protected int getLongitud() {
+	public int getLongitud() {
 		return longitud;
+	}
+	public int getMaxS() {
+		return this.vel_max;
+	}
+	public int getSpeedL() {
+		return this.lim_vel;
+	}
+	public int getTotalC() {
+		return this.total_cont;
+	}
+	public int getCO2() {
+		return this.alarma;
 	}
 	void enter(Vehicle v) {
 		if(v.getV()!=0||v.getL()!=0) {
@@ -116,6 +128,25 @@ protected Junction getini() {
 			}
 		}
 		//Collections.sort(lista_v); // nose como va esto
+	}
+	public String getWeather() {
+		String x= null;
+		if(tiempo==Weather.CLOUDY) {
+			x="CLOUDY";
+		}
+		else if(tiempo==Weather.RAINY) {
+			x="RAINY";
+		}
+		else if(tiempo==Weather.STORM) {
+			x="STORM" ;
+		}
+		else if(tiempo==Weather.SUNNY) {
+			x="SUNNY" ;
+		}
+		else if(tiempo==Weather.WINDY) {
+			x="WINDY" ;
+		}
+		return x;
 	}
 	public JSONObject report() {
 		JSONObject jo= new JSONObject();

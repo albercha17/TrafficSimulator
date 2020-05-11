@@ -4,7 +4,13 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public class RoadsTableModel extends AbstractTableModel {
+import simulator.control.Controller;
+import simulator.model.Event;
+import simulator.model.RoadMap;
+import simulator.model.TrafficSimObserver;
+import simulator.model.Road;
+
+public class RoadsTableModel extends AbstractTableModel  implements TrafficSimObserver{
 
 	/**
 	 * 
@@ -12,11 +18,13 @@ public class RoadsTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private List<EventEx> _events;
-	private String[] _colNames = { "#", "Time", "Priority" };
-
+	private List<Road> rList;
+	private String[] _colNames = { "ID", "Lenght", "Weather","Max Speed", "Speed","Total Cont", "Distance" };
 	public RoadsTableModel() {
-		_events=null;
+		rList=null;
+	}
+	public RoadsTableModel(Controller ctr) {
+		ctr.addObserver(this);
 	}
 
 	public void update() {
@@ -28,8 +36,8 @@ public class RoadsTableModel extends AbstractTableModel {
 		fireTableDataChanged();;		
 	}
 	
-	public void setEventsList(List<EventEx> events) {
-		_events = events;
+	public void setEventsList(List<Road> events) {
+		rList = events;
 		update();
 	}
 
@@ -59,7 +67,7 @@ public class RoadsTableModel extends AbstractTableModel {
 	//
 	// the number of row, like those in the events list
 	public int getRowCount() {
-		return _events == null ? 0 : _events.size();
+		return rList == null ? 0 : rList.size();
 	}
 
 	@Override
@@ -73,15 +81,59 @@ public class RoadsTableModel extends AbstractTableModel {
 		Object s = null;
 		switch (columnIndex) {
 		case 0:
-			s = rowIndex;
+			s = rList.get(rowIndex).getId();
 			break;
 		case 1:
-			s = _events.get(rowIndex).getTime();
+			s = Integer.toString(rList.get(rowIndex).getLongitud());
 			break;
 		case 2:
-			s = _events.get(rowIndex).getPriority();
+			s = rList.get(rowIndex).getWeather();
+			break;
+		case 3:
+			s = Integer.toString(rList.get(rowIndex).getMaxS());
+			break;
+		case 4:
+			s = Integer.toString(rList.get(rowIndex).getSpeedL());
+			break;
+		case 5:
+			s = Integer.toString(rList.get(rowIndex).getTotalC());
+			break;
+		case 6:
+			s = Integer.toString(rList.get(rowIndex).getCO2());
 			break;
 		}
 		return s;
 	}
+	@Override
+	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onReset(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onRegister(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onError(String err) {
+		// TODO Auto-generated method stub
+		
+	}
 }
+
+	

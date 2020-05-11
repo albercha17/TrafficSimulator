@@ -26,6 +26,9 @@ public abstract class NewRoadEvent extends Event{
 	void execute(RoadMap map) {
 		map.addRoad(CreateRoad( map));
 	}
+	public int getCo2Limit() {
+		return co2limit;
+		}
 	@Override
 	public String toString() {
 	return "New Road '"+id+"'";

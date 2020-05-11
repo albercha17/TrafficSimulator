@@ -4,7 +4,13 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public class JunctionsTableModel extends AbstractTableModel {
+import simulator.control.Controller;
+import simulator.model.Event;
+import simulator.model.Junction;
+import simulator.model.RoadMap;
+import simulator.model.TrafficSimObserver;
+
+public class JunctionsTableModel extends AbstractTableModel implements TrafficSimObserver {
 
 	/**
 	 * 
@@ -12,11 +18,12 @@ public class JunctionsTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private List<EventEx> _events;
-	private String[] _colNames = { "#", "Time", "Priority" };
+	private List<Junction> jList;
+	private String[] _colNames = { "id", "Green", "Queues" };
 
-	public JunctionsTableModel() {
-		_events=null;
+	public JunctionsTableModel(Controller ctr) {
+		ctr.addObserver(this);
+		jList=null;
 	}
 
 	public void update() {
@@ -28,8 +35,8 @@ public class JunctionsTableModel extends AbstractTableModel {
 		fireTableDataChanged();;		
 	}
 	
-	public void setEventsList(List<EventEx> events) {
-		_events = events;
+	public void setEventsList(List<Junction> events) {
+		jList = events;
 		update();
 	}
 
@@ -59,7 +66,7 @@ public class JunctionsTableModel extends AbstractTableModel {
 	//
 	// the number of row, like those in the events list
 	public int getRowCount() {
-		return _events == null ? 0 : _events.size();
+		return jList == null ? 0 : jList.size();
 	}
 
 	@Override
@@ -73,15 +80,51 @@ public class JunctionsTableModel extends AbstractTableModel {
 		Object s = null;
 		switch (columnIndex) {
 		case 0:
-			s = rowIndex;
+			s = jList.get(rowIndex).getId();
 			break;
 		case 1:
-			s = _events.get(rowIndex).getTime();
+			s = jList.get(rowIndex).;
 			break;
 		case 2:
 			s = _events.get(rowIndex).getPriority();
 			break;
 		}
 		return s;
+	}
+
+	@Override
+	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReset(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRegister(RoadMap map, List<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onError(String err) {
+		// TODO Auto-generated method stub
+		
 	}
 }

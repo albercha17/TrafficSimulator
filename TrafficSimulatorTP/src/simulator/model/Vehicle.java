@@ -97,7 +97,17 @@ public class Vehicle extends SimulatedObject {
 	public List<Junction> getI() {
 		return itinerario;
 	}
-	
+	public String getItinerario() {
+		String x="[";
+		for(int i=0; i<itinerario.size()-1;i++) {
+			x= x+itinerario.get(i).getId()+", ";
+		}
+		x=x+x+itinerario.get(itinerario.size()-1)+"]";
+		return x;
+	}
+	public String getLocaliation() {
+		return carretera.getId()+ " " + localizacion;
+	}
 	public int getL() {
 		return localizacion;
 	}
@@ -110,7 +120,15 @@ public class Vehicle extends SimulatedObject {
 	public Road getR() {
 		return carretera;
 	}
-
+	public int getMV() {
+		return vel_max;
+	}
+	public int getCont_total() {
+		return cont_total;
+	}
+	public int getD() {
+		return distanciaT;
+	}
 	public void advance(int time) {
 		int previaL;
 		int cont;
