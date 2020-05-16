@@ -52,10 +52,10 @@ public abstract class Road extends SimulatedObject {
 				}
 			contador=lista_v.size();
 			}
-protected Junction getFin() {
+public Junction getFin() {
 	return fin;
 }
-protected Junction getini() {
+public Junction getini() {
 	return origen;
 }
 	public int getLongitud() {
@@ -72,6 +72,9 @@ protected Junction getini() {
 	}
 	public int getCO2() {
 		return this.alarma;
+	}
+	public List<Vehicle> getV(){
+		return lista_v;
 	}
 	void enter(Vehicle v) {
 		if(v.getV()!=0||v.getL()!=0) {

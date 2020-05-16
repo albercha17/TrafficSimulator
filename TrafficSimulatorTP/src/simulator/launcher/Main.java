@@ -2,12 +2,15 @@ package simulator.launcher;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -35,10 +38,12 @@ import simulator.model.DequeuingStrategy;
 import simulator.model.Event;
 import simulator.model.LightSwitchingStrategy;
 import simulator.model.TrafficSimulator;
+import simulator.view.MainWindow;
 
 public class Main {
 
 	private final static Integer _timeLimitDefaultValue = 10;
+	private boolean consola= false;
 	private static Integer _timeLimit = null; // númerode pasos
 	private static String _inFile = null;
 	private static String _outFile = null;
@@ -159,11 +164,36 @@ public class Main {
 
 	
 	}
+	private static void startGUIMode () throws IOException {
+		InputStream in =null;
+		if(_inFile!=null) {
+		 in = new FileInputStream(new File(_inFile));
+		OutputStream out= _outFile == null ? 
+		System.out : new FileOutputStream(new File(_outFile));
+		} 
+		TrafficSimulator sim = new TrafficSimulator(); 
+			Controller ctrl= new Controller(sim, _eventsFactory); 
+			ctrl.loadEvents(in); 
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new MainWindow(ctrl);
+			}
+		});
+		
+	}
 
 	private static void start(String[] args) throws IOException {
+		if(args[0]== "gui") {
+			initFactories();
+			parseArgs(args);
+			startGUIMode();
+		}
+		else if(args[0]== "console") {
 		initFactories();
 		parseArgs(args);
 		startBatchMode();
+		}
 	}
 
 	// example command lines:

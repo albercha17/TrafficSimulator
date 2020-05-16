@@ -12,6 +12,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import extra.jtable.EventsTableModel;
+import extra.jtable.JunctionsTableModel;
+import extra.jtable.RoadsTableModel;
+import extra.jtable.VehiclesTableModel;
 import simulator.control.Controller;
 
 public class MainWindow extends JFrame {
@@ -34,16 +37,33 @@ public class MainWindow extends JFrame {
 		JPanel mapsPanel = new JPanel();
 		mapsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
 		viewsPanel.add(mapsPanel);
+		
 		// tables
-		JPanel eventsView =createViewPanel(new JTable(new EventsTableModel()), "Events");
+		JPanel eventsView =createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
 		eventsView.setPreferredSize(new Dimension(500, 200));
 		tablesPanel.add(eventsView);
+		
+		JPanel vehiclesView =createViewPanel(new JTable(new VehiclesTableModel(_ctrl)), "Vehicles");
+		eventsView.setPreferredSize(new Dimension(500, 200));
+		tablesPanel.add(vehiclesView);
+		
+		JPanel junctionsView =createViewPanel(new JTable(new JunctionsTableModel(_ctrl)), "Junctions");
+		eventsView.setPreferredSize(new Dimension(500, 200));
+		tablesPanel.add(junctionsView);
+		
+		JPanel roadsView =createViewPanel(new JTable(new RoadsTableModel(_ctrl)), "Roads");
+		eventsView.setPreferredSize(new Dimension(500, 200));
+		tablesPanel.add(roadsView);
 		// TODO add other tables
 		// ...
 		// maps
 		JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");
 		mapView.setPreferredSize(new Dimension(500, 400));
 		mapsPanel.add(mapView);
+		
+		JPanel mapView2 = createViewPanel(new MapByRoadComponent(_ctrl), "Map");
+		mapView.setPreferredSize(new Dimension(500, 400));
+		mapsPanel.add(mapView2);
 		// TODO add a map for MapByRoadComponent
 		// ...
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

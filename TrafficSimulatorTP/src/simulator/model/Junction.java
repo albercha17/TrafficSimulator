@@ -1,5 +1,6 @@
 package simulator.model;
 
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -55,6 +56,22 @@ public class Junction extends SimulatedObject {
 	protected Road getR(Junction j) {
 		Road r= mapa_carre.get(j);
 		 return r;
+	}
+	public String getGreen() {
+		if(verde==-1) return "NONE";
+		else return lista_carre.get(verde).getId();
+	}
+	public String getQueues() {
+		String x= " ";
+		if(lista_carre.size()>0) {
+			for(int i=0;i<lista_carre.size();i++) {
+				x= x +lista_carre.get(i).getId()+"[";
+				for(Vehicle j: lista_colas.get(i)) {
+					x=x+j.getId()+", ";
+				}
+			}
+		}
+			return x;
 	}
 	public void addOutGoingRoad(Road r){
 		if(mapa_carre.get(r.getFin())==null||r.getini()==this) {
@@ -124,4 +141,20 @@ public class Junction extends SimulatedObject {
 		jo.put("queues", listT);
 		return jo;
 }
+	public int getGreenLightIndex() {
+		// TODO Auto-generated method stub
+		return verde;
+	}
+	public int getX() {
+		// TODO Auto-generated method stub
+		return CoorX;
+	}
+	public int getY() {
+		// TODO Auto-generated method stub
+		return CoorY;
+	}
+	public List<Road>  getInRoads() {
+		// TODO Auto-generated method stub
+		return lista_carre;
+	}
 }

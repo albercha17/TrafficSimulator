@@ -18,6 +18,9 @@ public TrafficSimulator() {
 	ListaEventos= new ArrayList<Event>();
 	listOb= new ArrayList<TrafficSimObserver>();
 }
+public RoadMap getM() {
+	return MapaCarreteras;
+}
 public void addEvent(Event e) {
 	ListaEventos.add(e);
 	for(TrafficSimObserver i : listOb) {

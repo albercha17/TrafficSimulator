@@ -1,7 +1,9 @@
 package extra.jtable;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 import simulator.control.Controller;
@@ -21,9 +23,10 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 	private List<Junction> jList;
 	private String[] _colNames = { "id", "Green", "Queues" };
 
+	
 	public JunctionsTableModel(Controller ctr) {
+		jList= new ArrayList<Junction>();
 		ctr.addObserver(this);
-		jList=null;
 	}
 
 	public void update() {
@@ -35,7 +38,7 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 		fireTableDataChanged();;		
 	}
 	
-	public void setEventsList(List<Junction> events) {
+	public void setJunctionsList(List<Junction> events) {
 		jList = events;
 		update();
 	}
@@ -83,10 +86,10 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 			s = jList.get(rowIndex).getId();
 			break;
 		case 1:
-			s = jList.get(rowIndex).;
+			s = jList.get(rowIndex).getGreen();
 			break;
 		case 2:
-			s = _events.get(rowIndex).getPriority();
+			s = jList.get(rowIndex).getQueues();
 			break;
 		}
 		return s;
@@ -94,32 +97,29 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
-		
+		setJunctionsList(map.getJunctions());
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		setJunctionsList(map.getJunctions());
 		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		// TODO Auto-generated method stub
+		setJunctionsList(map.getJunctions());
 		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
-		
+		setJunctionsList(map.getJunctions());
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
-		
+		setJunctionsList(map.getJunctions());
 	}
 
 	@Override

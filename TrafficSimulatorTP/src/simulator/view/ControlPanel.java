@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -17,22 +18,34 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import simulator.control.Controller;
 import simulator.model.Event;
+import simulator.model.Road;
 import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
+import simulator.model.Vehicle;
 
 public class ControlPanel extends JPanel implements TrafficSimObserver{
 	private Controller ctr;
+	private JTextField t;
+	private List<Vehicle> listV;
+	private List<Road> listR;
+	private int time;
 	private boolean _stopped= false;
 	private JButton cargar, cambiarC, cambiarT, pausar, continuar, salir;
 	private JToolBar jt;
 	private JSpinner ticks;
 	public ControlPanel(Controller ctr) {
+		time=0;
+		listV= new ArrayList<Vehicle>();
+		listR= new ArrayList<Road>();
 		this.ctr=ctr;
 		this.setLayout(new BorderLayout());
 		jt= new JToolBar();
@@ -63,7 +76,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		cambiarC.setVisible(true);
 		cambiarC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new ChangeCO2ClassDialog(ctr);
+				new ChangeCO2ClassDialog(ctr, listV, time);
 			}
 		});
 		jt.add(cambiarC);
@@ -76,7 +89,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		cambiarT.setVisible(true);
 		cambiarT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new ChangeWeatherDialog(ctr);
+				new ChangeWeatherDialog(ctr, listR, time);
 			}
 		});
 		jt.add(cambiarT);
@@ -113,9 +126,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		pausar= new JButton();
 		pausar.setIcon(icono);
 		pausar.setVisible(true);
+		int y=(int) ticks.getValue();
 		pausar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				run_sim(y);
 			}
 		});
 		jt.add(pausar);
@@ -126,9 +140,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		continuar= new JButton();
 		continuar.setIcon(icono);
 		continuar.setVisible(true);
+		int y=Integer.parseInt(ticks.getValue().toString());
 		continuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				_stopped= false;
+				run_sim(y);
 			}
 		});
 		jt.add(continuar);
@@ -151,31 +167,40 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
 		// TODO Auto-generated method stub
-		
+		listR= map.getRoads();
+		listV=map.getVehicles();
+		this.time=time;
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
-		
+		listR= map.getRoads();
+		listV=map.getVehicles();
+		this.time=time;
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
 		// TODO Auto-generated method stub
-		
+		listR= map.getRoads();
+		listV=map.getVehicles();
+		this.time=time;
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		listR= map.getRoads();
+		listV=map.getVehicles();
+		this.time=time;
 		
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
 		// TODO Auto-generated method stub
-		
+		listR= map.getRoads();
+		listV=map.getVehicles();
+		this.time=time;
 	}
 
 	@Override
@@ -183,7 +208,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		// TODO Auto-generated method stub
 		
 	}
-	public void habilitarB(boolean x) {
+	public void enableToolBar(boolean x) {
 		if(x) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -209,20 +234,27 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	private void run_sim(int n) {
 		if (n > 0 && !_stopped) {
 		try {
-		this.ctr.run(1);
+		ctr.run(1);
 		} catch (Exception e) {
 		// TODO show error message
 		_stopped = true;
+		enableToolBar(true);
 		return;
 		}
 		SwingUtilities.invokeLater(new Runnable() {
 		@Override
 		public void run() {
 		run_sim(n - 1);
+		try {
+			Thread.sleep(50);
+		}
+		catch(InterruptedException e) {
+			
+		}
 		}
 		});
 		} else {
-		habilitarB(true);
+		enableToolBar(true);
 		_stopped = true;
 		}
 		}

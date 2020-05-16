@@ -2,6 +2,7 @@ package extra.jtable;
 
 import java.util.List;
 
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 import simulator.control.Controller;
@@ -19,10 +20,8 @@ public class RoadsTableModel extends AbstractTableModel  implements TrafficSimOb
 	
 	
 	private List<Road> rList;
-	private String[] _colNames = { "ID", "Lenght", "Weather","Max Speed", "Speed","Total Cont", "Distance" };
-	public RoadsTableModel() {
-		rList=null;
-	}
+	private String[] _colNames = { "ID","Status", "Lenght", "Weather","Max Speed", "Speed","Total Cont", "Distance" };
+	
 	public RoadsTableModel(Controller ctr) {
 		ctr.addObserver(this);
 	}
@@ -36,7 +35,7 @@ public class RoadsTableModel extends AbstractTableModel  implements TrafficSimOb
 		fireTableDataChanged();;		
 	}
 	
-	public void setEventsList(List<Road> events) {
+	public void setRoadsList(List<Road> events) {
 		rList = events;
 		update();
 	}
@@ -106,27 +105,25 @@ public class RoadsTableModel extends AbstractTableModel  implements TrafficSimOb
 	}
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
-		
+		setRoadsList(map.getRoads());
 	}
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		setRoadsList(map.getRoads());
 		
 	}
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		// TODO Auto-generated method stub
+		setRoadsList(map.getRoads());
 		
 	}
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
-		
+		setRoadsList(map.getRoads());
 	}
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		setRoadsList(map.getRoads());
 		
 	}
 	@Override

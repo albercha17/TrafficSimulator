@@ -94,6 +94,25 @@ public class Vehicle extends SimulatedObject {
 			
 		}
 	}
+	public String getE() {
+		if(getEstado()==VehicleStatus.ARRIVED) {
+			return "ARRIVED";
+		}
+		else if(getEstado()==VehicleStatus.PENDING) {
+			return"PENDING";
+		}
+		else if(getEstado()==VehicleStatus.TRAVELING) {
+			return"TRAVELING";
+		}
+		else if(getEstado()==VehicleStatus.WAITING) {
+			return"WAITING";
+		}
+		if(getEstado()!=VehicleStatus.ARRIVED) {
+			return "ARRIVED";
+		}
+		return null;
+		
+	}
 	public List<Junction> getI() {
 		return itinerario;
 	}

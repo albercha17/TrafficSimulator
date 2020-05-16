@@ -28,16 +28,27 @@ public class Controller {
         } 
 
 
-
+    public TrafficSimulator getTrafic() {
+    	return sim;
+    }
    public void loadEvents(InputStream in) {
+	   if(in==null) {
+	   
+	   }
+	   else {
        JSONObject jsonInupt = new JSONObject(new JSONTokener(in));
        JSONArray events = jsonInupt.getJSONArray("events"); 
        for(int i = 0; i < events.length(); i++) {
            sim.addEvent(_eventsFactory.createInstance(events.getJSONObject(i)));
        }
        events=null;
+	   }
    }
-
+   public void run(int n) {
+	   for(int i=0; i<n-1;i++) {
+		   sim.advance();
+	   }
+   }
        public void run(int n, OutputStream out) {
            if (out == null)
            { out = new OutputStream() {

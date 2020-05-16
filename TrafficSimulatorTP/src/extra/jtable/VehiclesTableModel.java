@@ -2,6 +2,7 @@ package extra.jtable;
 
 import java.util.List;
 
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 
 import simulator.control.Controller;
@@ -20,9 +21,7 @@ public class VehiclesTableModel extends AbstractTableModel  implements TrafficSi
 	
 	private List<Vehicle> vList;
 	private String[] _colNames = { "ID", "Localitation", "Itinerary", "CO2 Class", "Max Speed", "Speed", "Total CO2", "Distance" };
-	public VehiclesTableModel() {
-		vList=null;
-	}
+	
 	public VehiclesTableModel(Controller ctr) {
 		ctr.addObserver(this);
 	}
@@ -36,7 +35,7 @@ public class VehiclesTableModel extends AbstractTableModel  implements TrafficSi
 		fireTableDataChanged();;		
 	}
 	
-	public void setEventsList(List<Vehicle> events) {
+	public void setVehiclessList(List<Vehicle> events) {
 		vList = events;
 		update();
 	}
@@ -109,27 +108,27 @@ public class VehiclesTableModel extends AbstractTableModel  implements TrafficSi
 	}
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		setVehiclessList(map.getVehicles());
 		
 	}
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		setVehiclessList(map.getVehicles());
 		
 	}
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		// TODO Auto-generated method stub
+		setVehiclessList(map.getVehicles());
 		
 	}
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		setVehiclessList(map.getVehicles());
 		
 	}
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		setVehiclessList(map.getVehicles());
 		
 	}
 	@Override
