@@ -65,7 +65,7 @@ public class Junction extends SimulatedObject {
 		String x= " ";
 		if(lista_carre.size()>0) {
 			for(int i=0;i<lista_carre.size();i++) {
-				x= x +lista_carre.get(i).getId()+"[";
+				x= x +lista_carre.get(i).getId()+"[]";
 				for(Vehicle j: lista_colas.get(i)) {
 					x=x+j.getId()+", ";
 				}
