@@ -15,9 +15,11 @@ import simulator.model.TrafficSimObserver;
 
 public class StatusBar extends JPanel implements TrafficSimObserver {
 	JLabel time, Event;
+	String nomEvent;
 	StatusBar(Controller ctr) {
 		this.time = new JLabel("Time: " + 0);
-		this.Event = new JLabel("Event added " + " ");
+		this.Event = new JLabel();
+		this.Event.setText("START THE SIMULATOR");
 		initGUI();
 		ctr.addObserver(this);
 	}
@@ -31,30 +33,18 @@ public class StatusBar extends JPanel implements TrafficSimObserver {
 	}
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		
-		
+		this.time.setText(String.valueOf("Time: " + time));
+		this.Event.setText("RUN");
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		boolean x= false;
-		this.time.setText(String.valueOf("Time: " + time));
-		for(int i=0; i< events.size();i++) {
-			if(time==events.get(i).getTime()&& !x) {
-				Event.setText("Event added " + events.get(i).toString());
-				x=true;
-			}
-		}
-		if(!x) {
 
-			Event.setText(" ");
-		}
-		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		
+		String x=e.toString();
 		this.time.setText(String.valueOf("Time: " + time));
 		Event.setText("Event added " + e.toString());
 		
@@ -63,7 +53,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver {
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
 		this.time.setText(String.valueOf("Time: " + time));
-		Event.setText("Event added " + " ");
+		Event.setText("RESET");
 		
 	}
 
@@ -75,7 +65,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver {
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

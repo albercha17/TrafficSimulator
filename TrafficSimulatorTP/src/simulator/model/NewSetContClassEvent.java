@@ -28,6 +28,9 @@ public class NewSetContClassEvent extends Event{
 	}
 	@Override
 	public String toString() {
-	return "New SetContClass ";
+		String x="Change SetContClass:[ ";
+		for(int i=0; i<cs.size();i++) x= x+" ("+cs.get(i).getFirst() + " "+ Integer.toString(cs.get(i).getSecond())+ ") ";
+		x=x+ "]";
+		return x;
 	}
 	}

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -33,7 +34,7 @@ public class ChangeWeatherDialog extends JDialog {
 	static final int NumW = 5;
 	private JSpinner ticks, weather, road;
 	private String r, w;
-	private int t;
+	private int t, time;
 	private JButton ok, salir;
 	private List<Road> listR;
 	private List<Pair<String,Weather>> ws;
@@ -47,6 +48,8 @@ public class ChangeWeatherDialog extends JDialog {
 			this.setTitle("change Weather class");
 			t=-1;
 		this.listR=listR;
+		this.time=time;
+		ws = new ArrayList<Pair<String,Weather>>();
       road();
       weather();
       ticks();
@@ -62,14 +65,17 @@ public class ChangeWeatherDialog extends JDialog {
 		 ok = new JButton("Aceptar");
 			ok.setVisible(true);
 		ok.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(t!=-1|| r!=null||w!=null) {
+			public void actionPerformed(ActionEvent arg0) { 
+				w=weather.getValue().toString();
+				t=Integer.parseInt(ticks.getValue().toString());	
+				r=road.getValue().toString();
 					Weather wea= Weather.valueOf(w);
 					Pair<String,Weather> p= new Pair<String,Weather>(r,wea);
 					ws.add(p);
+					t=t+time;
 				SetWeatherEvent e = new SetWeatherEvent(t,ws);
 				ctr.addEvent(e);
-			}
+				dispose();
 			}
 		});
 		add(ok);
@@ -86,13 +92,12 @@ public class ChangeWeatherDialog extends JDialog {
 		add(salir);
 	}
 	public void ticks() {
-		ticks = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 10));
+		ticks = new JSpinner(new SpinnerNumberModel(10, 0, 10000, 10));
 		ticks.setToolTipText("Ticks");
 		ticks.setMaximumSize(new Dimension(70, 70));
 		Jt=new JLabel("Ticks: ", SwingConstants.LEFT);
 		add(Jt);
 		add(ticks);
-		t=Integer.parseInt(ticks.getValue().toString());	
 	
 	}
 	public void road() {
@@ -108,7 +113,6 @@ public class ChangeWeatherDialog extends JDialog {
 		add(Jr);
 		add(road);
 		road.setVisible(true);
-		r=road.getValue().toString();
 	}
 	public void weather() {
 		String weathers[]={"SUNNY", "CLOUDY", "RAINY", "WINDY", "STORM"};
@@ -120,6 +124,6 @@ public class ChangeWeatherDialog extends JDialog {
 		weather.setVisible(true);
 		add(Jw);
 		add(weather);
-		w=weather.getValue().toString();
+		
 	}
 }

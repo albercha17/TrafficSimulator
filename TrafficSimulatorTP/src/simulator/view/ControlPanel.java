@@ -175,10 +175,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	}
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
-		listR= map.getRoads();
-		listV=map.getVehicles();
-		this.time=time;
+		
 	}
 
 	@Override

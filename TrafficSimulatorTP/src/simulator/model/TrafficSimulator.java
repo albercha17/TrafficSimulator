@@ -39,7 +39,7 @@ public void advance() {
 		}
 	}
 	for(int j=0; j<ListaEventos.size();j++) {
-		if(ListaEventos.get(j).getTime()==TiempoSimulacion) {
+		if(ListaEventos.get(j).getTime()<=TiempoSimulacion) {
 			ListaEventos.remove(j);
 		}
 		
@@ -57,7 +57,7 @@ public void advance() {
 
 public void reset() {
 	TiempoSimulacion=0;
-	MapaCarreteras=null;
+	MapaCarreteras.reset();
 	ListaEventos.clear();
 	for(TrafficSimObserver i : listOb) {
 		i.onReset(MapaCarreteras, ListaEventos, TiempoSimulacion);

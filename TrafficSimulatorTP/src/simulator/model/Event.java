@@ -21,6 +21,6 @@ public abstract class Event implements Comparable<Event> {
 		if(this._time<o._time) return -1;
 		return 1;
 	}
-
+	public abstract String toString();
 	abstract void execute(RoadMap map);
 }

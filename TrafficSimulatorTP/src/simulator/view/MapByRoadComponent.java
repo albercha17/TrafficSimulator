@@ -89,7 +89,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver {
 
 			// draw line from (x1,y1) to (x2,y2) with arrow of color arrowColor and line of
 			// color roadColor. The size of the arrow is 15px length and 5 px width
-			
+			g.setColor(Color.BLUE);
 			g.drawLine(x1, y, x2, y);
 			g.setColor(Color.BLUE);
 			g.fillOval(x1, y, 10, 10);
@@ -147,8 +147,10 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver {
 		}
 		maxW += 20;
 		maxH += 20;
-		setPreferredSize(new Dimension(maxW, maxH));
-		setSize(new Dimension(maxW, maxH));
+		if (maxW > getWidth() || maxH > getHeight()) {
+		    setPreferredSize(new Dimension(maxW, maxH));
+		   setSize(new Dimension(maxW, maxH));
+		}
 	}
 
 	// This method draws a line from (x1,y1) to (x2,y2) with an arrow.

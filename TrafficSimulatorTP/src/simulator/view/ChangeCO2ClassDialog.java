@@ -62,17 +62,21 @@ public class ChangeCO2ClassDialog extends JDialog {
 	public void aceptar(Controller ctr) {
 		 ok = new JButton("Aceptar");
 		ok.setVisible(true);
-		if(t!=-1|| c!=-1||v!=null) {
-		Pair<String,Integer> p= new Pair<String,Integer>(v,c);
-		cs.add(p);
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				c=Integer.parseInt(contClass.getValue().toString());
+				t=Integer.parseInt(ticks.getValue().toString());
+				v=vehicle.getValue().toString();
+				Pair<String,Integer> p= new Pair<String,Integer>(v,c);
+				cs.add(p);
+				t=t+time;
 				NewSetContClassEvent e = new NewSetContClassEvent(t,cs);
 				ctr.addEvent(e);
+				dispose();
 			}
 		});
 		add(ok);
-		}
+		
 	}
 	public void cancelar() {
 		salir= new JButton("Cancelar");
@@ -86,10 +90,9 @@ public class ChangeCO2ClassDialog extends JDialog {
 		add(salir);
 	}
 	public void ticks() {
-		ticks = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 10));
+		ticks = new JSpinner(new SpinnerNumberModel(10, 0, 10000, 10));
 		ticks.setToolTipText("Ticks");
 		ticks.setMaximumSize(new Dimension(70, 70));
-		t=Integer.parseInt(ticks.getValue().toString());
 		Jt=new JLabel("ticks: ", SwingConstants.CENTER);
 		add(Jt);
 		add(ticks);
@@ -104,16 +107,15 @@ public class ChangeCO2ClassDialog extends JDialog {
 		vehicle = new JSpinner(model1);
 		vehicle.setToolTipText("Vehicle");
 		vehicle.setMaximumSize(new Dimension(70, 70));
-		v=vehicle.getValue().toString();
 		Jv=new JLabel("V: ", SwingConstants.CENTER);
 		add(Jv);
 		add(vehicle);
 	}
 	public void contClass() {
 		contClass = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
+		contClass.setValue(0);
 		contClass.setToolTipText("CO2 Class");
 		contClass.setMaximumSize(new Dimension(70, 70));
-		c=Integer.parseInt(contClass.getValue().toString());
 		Jc=new JLabel("Cont: ", SwingConstants.CENTER);
 		add(Jc);
 		add(contClass);
