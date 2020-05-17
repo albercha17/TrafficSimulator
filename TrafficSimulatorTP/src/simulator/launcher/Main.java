@@ -48,6 +48,7 @@ public class Main {
 	private static String _inFile = null;
 	private static String _outFile = null;
 	private static String time = null;
+	private static boolean mode=false;
 	private static Factory<Event> _eventsFactory = null;
 
 	private static void parseArgs(String[] args) {
@@ -61,6 +62,7 @@ public class Main {
 		CommandLineParser parser = new DefaultParser();
 		try {
 			CommandLine line = parser.parse(cmdLineOptions, args);
+			parseMode(line);
 			parseHelpOption(line, cmdLineOptions);
 			parseInFileOption(line);
 			parseOutFileOption(line);
@@ -86,7 +88,7 @@ public class Main {
 
 	private static Options buildOptions() {
 		Options cmdLineOptions = new Options();
-
+		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg().desc("Mode").build());
 		cmdLineOptions.addOption(Option.builder("i").longOpt("input").hasArg().desc("Events input file").build());
 		cmdLineOptions.addOption(
 				Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
@@ -107,8 +109,16 @@ public class Main {
 	private static void parseInFileOption(CommandLine line) throws ParseException {
 		_inFile = line.getOptionValue("i");
 		if (_inFile == null) {
-			throw new ParseException("An events file is missing");
+			System.out.printf("An events file is missing");
 		}
+	}
+	private static void parseMode(CommandLine line) throws ParseException {
+		String x = line.getOptionValue("m");
+		if (x =="gui") mode=true;
+		else if(x=="console") mode =false; 
+		//else throw new ParseException("The mode is not valid");
+		
+		
 	}
 	private static void parseTime(CommandLine line) throws ParseException {
 		time = line.getOptionValue("t");
@@ -152,8 +162,7 @@ public class Main {
 	private static void startBatchMode() throws IOException {
 		InputStream in = new FileInputStream(new File(_inFile));
 		OutputStream out= _outFile == null ? 
-				System.out : new FileOutputStream(new File(_outFile)); 
-		
+		System.out : new FileOutputStream(new File(_outFile)); 
 		TrafficSimulator sim = new TrafficSimulator(); 
 		Controller ctrl= new Controller(sim, _eventsFactory); 
 		
@@ -167,13 +176,14 @@ public class Main {
 	private static void startGUIMode () throws IOException {
 		InputStream in =null;
 		if(_inFile!=null) {
-		 in = new FileInputStream(new File(_inFile));
-		OutputStream out= _outFile == null ? 
-		System.out : new FileOutputStream(new File(_outFile));
+			in = new FileInputStream(new File(_inFile));
+			OutputStream out= _outFile == null ? 
+			System.out : new FileOutputStream(new File(_outFile));
 		} 
+		
 		TrafficSimulator sim = new TrafficSimulator(); 
-			Controller ctrl= new Controller(sim, _eventsFactory); 
-			ctrl.loadEvents(in); 
+		Controller ctrl= new Controller(sim, _eventsFactory); 
+		ctrl.loadEvents(in); 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -184,23 +194,20 @@ public class Main {
 	}
 
 	private static void start(String[] args) throws IOException {
-		if(args[0]== "gui") {
-			initFactories();
-			parseArgs(args);
-			startGUIMode();
-		}
-		else if(args[0]== "console") {
 		initFactories();
 		parseArgs(args);
-		startBatchMode();
-		}
+		mode=true;
+		_inFile="resources/examples/ex1.json";
+		if(mode) startGUIMode();
+		else startBatchMode();
+		
 	}
 
 	// example command lines:
-	//
+	//-m gui -i resources/other/json-example-1.json
 	// -i resources/examples/ex1.json
 	// -i resources/examples/ex1.json -t 300
-	// -i resources/examples/ex1.json -o resources/tmp/ex1.out.json
+	// -i resources/examples/ex1.json -o resources/other/json-example-1.json
 	// --help
 
 	public static void main(String[] args) {

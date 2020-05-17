@@ -36,6 +36,7 @@ public class ChangeWeatherDialog extends JDialog {
 	private List<Pair<String,Weather>> ws;
 	
 	ChangeWeatherDialog(Controller ctr, List<Road> listR, int time){
+		if(listR.size()==0) {
 		this.listR=listR;
 		 JDialog d = new JDialog(this, "change Weather class"); 
 		 this.setLayout(new BorderLayout());
@@ -44,7 +45,10 @@ public class ChangeWeatherDialog extends JDialog {
       ticks();
       aceptar(ctr);
       this.setVisible(true);
-         
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "The Road list is empty");
+		}
 	}
 	public void aceptar(Controller ctr) {
 		 ok = new JButton();

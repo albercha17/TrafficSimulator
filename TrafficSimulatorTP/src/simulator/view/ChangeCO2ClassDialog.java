@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
@@ -33,6 +34,7 @@ public class ChangeCO2ClassDialog extends JDialog {
 	private List<Pair<String,Integer>> cs;
 	
 	ChangeCO2ClassDialog(Controller ctr, List<Vehicle> listV, int time){
+		if(listV.size()!=0) {
 		this.listV=listV;
 		this.time=time;
 		cs = new ArrayList<Pair<String,Integer>>();
@@ -44,7 +46,10 @@ public class ChangeCO2ClassDialog extends JDialog {
       aceptar(ctr);
       cancelar();
       this.setVisible(true);
-         
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "The Vehicle list is empty");
+		}
 	}
 	public void aceptar(Controller ctr) {
 		 ok = new JButton();

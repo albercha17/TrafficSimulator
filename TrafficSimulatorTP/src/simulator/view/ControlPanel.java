@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -49,31 +50,34 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		this.ctr=ctr;
 		this.setLayout(new BorderLayout());
 		jt= new JToolBar();
+		cargar();
 		cambiarTiempo();
 		cambiarCont();
-		cargar();
-		pausar();
 		continuar();
-		salir();
+		pausar();
 		ticks();
+		salir();
 		jt.setVisible(true);
-		
+		add(jt);
+		this.setVisible(true);
+		ctr.addObserver(this);
 	}
 	public void ticks() {
-		ticks = new JSpinner(new SpinnerNumberModel(5, 0, 10000, 100));
-		ticks.setToolTipText("number of ticks");
-		ticks.setMaximumSize(new Dimension(70, 70));
-		ticks.setMinimumSize(new Dimension(70, 70));
+		JLabel tickL= new JLabel("Ticks:");
+		ticks = new JSpinner(new SpinnerNumberModel(5, 0, 10000, 10));
 		ticks.setValue(0);
 		ticks.setVisible(true);
+		ticks.setMaximumSize(new Dimension(35, 40));
+		ticks.setToolTipText("number of ticks");
+		jt.add(tickL);
 		jt.add(ticks);
 	}
 	public void cambiarCont() {
 		ImageIcon icono= new ImageIcon("resources/icons/co2class.png");
-		cambiarC.setToolTipText("change the contamination");
 		cambiarC= new JButton();
 		cambiarC.setIcon(icono);
 		cambiarC.setVisible(true);
+		cambiarC.setToolTipText("change the contamination");
 		cambiarC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new ChangeCO2ClassDialog(ctr, listV, time);
@@ -83,10 +87,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	}
 	public void cambiarTiempo() {
 		ImageIcon icono= new ImageIcon("resources/icons/weather.png");
-		cambiarT.setToolTipText("change the weather");
 		cambiarT= new JButton();
 		cambiarT.setIcon(icono);
 		cambiarT.setVisible(true);
+		cambiarT.setToolTipText("change the weather");
 		cambiarT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new ChangeWeatherDialog(ctr, listR, time);
@@ -96,10 +100,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	}
 	public void cargar() {
 		ImageIcon icono= new ImageIcon("resources/icons/open.png");
-		cargar.setToolTipText("load");
 		cargar= new JButton();
 		cargar.setIcon(icono);
-		cargar.setVisible(true);
+		cargar.setVisible(true);	
+		cargar.setToolTipText("load");
 		cargar.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -122,13 +126,14 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	}
 	public void pausar() {
 		ImageIcon icono= new ImageIcon("resources/icons/stop.png");
-		pausar.setToolTipText("pause");
 		pausar= new JButton();
 		pausar.setIcon(icono);
 		pausar.setVisible(true);
-		int y=(int) ticks.getValue();
+		pausar.setToolTipText("pause");
 		pausar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				int y=Integer.parseInt(ticks.getValue().toString());
+				_stopped=true;
 				run_sim(y);
 			}
 		});
@@ -136,25 +141,26 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	}
 	public void continuar() {
 		ImageIcon icono= new ImageIcon("resources/icons/run.png");
-		continuar.setToolTipText("run");
 		continuar= new JButton();
 		continuar.setIcon(icono);
 		continuar.setVisible(true);
-		int y=Integer.parseInt(ticks.getValue().toString());
+		continuar.setToolTipText("run");
 		continuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				_stopped= false;
+				int y=Integer.parseInt(ticks.getValue().toString());
+				_stopped=false;
 				run_sim(y);
+				ctr.run(y);
 			}
 		});
 		jt.add(continuar);
 	}
 	public void salir() {
 		ImageIcon icono= new ImageIcon("resources/icons/exit.png");
-		salir.setToolTipText("exit");
 		salir= new JButton();
 		salir.setIcon(icono);
 		salir.setVisible(true);
+		salir.setToolTipText("exit");
 		salir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int x = JOptionPane.showOptionDialog(new JFrame(), "DO YOU WANT TO EXIT?", "EXIT",
@@ -209,13 +215,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		
 	}
 	public void enableToolBar(boolean x) {
-		if(x) {
+		if(!x) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				cambiarC.setEnabled(true);
 				cambiarT.setEnabled(true);
 				cargar.setEnabled(true);
-				salir.setEnabled(true);
 			}
 			
 		});
@@ -226,35 +231,34 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 					cambiarC.setEnabled(false);
 					cambiarT.setEnabled(false);
 					cargar.setEnabled(false);
-					salir.setEnabled(false);
 				}
 			});
 		}
 	}
 	private void run_sim(int n) {
 		if (n > 0 && !_stopped) {
-		try {
-		ctr.run(1);
-		} catch (Exception e) {
+			try {
+				ctr.run(1);
+			} catch (Exception e) {
 		// TODO show error message
-		_stopped = true;
-		enableToolBar(true);
-		return;
-		}
-		SwingUtilities.invokeLater(new Runnable() {
-		@Override
-		public void run() {
-		run_sim(n - 1);
-		try {
+				_stopped = true;
+				enableToolBar(true);
+				return;
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					run_sim(n - 1);
+					try {
 			Thread.sleep(50);
-		}
+					}
 		catch(InterruptedException e) {
 			
 		}
-		}
-		});
+			}
+			});
 		} else {
-		enableToolBar(true);
+		enableToolBar(false);
 		_stopped = true;
 		}
 		}
