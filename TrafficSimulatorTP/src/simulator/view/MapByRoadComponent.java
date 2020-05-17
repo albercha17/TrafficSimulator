@@ -95,7 +95,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver {
 			g.fillOval(x1, y, 10, 10);
 			g.setColor(arrowColor);
 			g.fillOval(x2, y, 10, 10);
-			
+			g.setColor(Color.BLUE);
 			// crear vehiculo
 			for(Vehicle v : r.getV()) {
 				
@@ -106,9 +106,9 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver {
 				
 				 
 			}
-			g.drawString(r.getId(), x1-10, y);
-			g.drawString(r.getini().getId(), x1, y-6);
-			g.drawString(r.getFin().getId(), x2, y-6);
+			g.drawString(r.getId(), x1-20, y);
+			g.drawString(r.getini().getId(), x1, y-20);
+			g.drawString(r.getFin().getId(), x2, y-20);
 			
 			// imagen segun el tiempo
 			ImageIcon Img2 = null;
@@ -154,35 +154,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver {
 	// This method draws a line from (x1,y1) to (x2,y2) with an arrow.
 	// The arrow is of height h and width w.
 	// The last two arguments are the colors of the arrow and the line
-	private void drawLineWithArrow(//
-			Graphics g, //
-			int x1, int y1, //
-			int x2, int y2, //
-			int w, int h, //
-			Color lineColor, Color arrowColor) {
-
-		int dx = x2 - x1, dy = y2 - y1;
-		double D = Math.sqrt(dx * dx + dy * dy);
-		double xm = D - w, xn = xm, ym = h, yn = -h, x;
-		double sin = dy / D, cos = dx / D;
-
-		x = xm * cos - ym * sin + x1;
-		ym = xm * sin + ym * cos + y1;
-		xm = x;
-
-		x = xn * cos - yn * sin + x1;
-		yn = xn * sin + yn * cos + y1;
-		xn = x;
-
-		int[] xpoints = { x2, (int) xm, (int) xn };
-		int[] ypoints = { y2, (int) ym, (int) yn };
-
-		g.setColor(lineColor);
-		g.drawLine(x1, y1, x2, y2);
-		g.setColor(arrowColor);
-		g.fillPolygon(xpoints, ypoints, 3);
-	}
-
+	
 	// loads an image from a file
 	private Image loadImage(String img) {
 		Image i = null;

@@ -2,6 +2,7 @@ package simulator.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -30,20 +32,26 @@ import simulator.model.Weather;
 public class ChangeWeatherDialog extends JDialog {
 	static final int NumW = 5;
 	private JSpinner ticks, weather, road;
-	private JTextField t,r, w;
+	private String r, w;
+	private int t;
 	private JButton ok, salir;
 	private List<Road> listR;
 	private List<Pair<String,Weather>> ws;
+	private JLabel Jt, Jr, Jw;
 	
 	ChangeWeatherDialog(Controller ctr, List<Road> listR, int time){
 		if(!listR.isEmpty()) {
+			this.setLayout(new GridLayout(6,2,5,10));
+			this.setSize(600,300);
+			this.setLocationRelativeTo(null);
+			this.setTitle("change Weather class");
+			t=-1;
 		this.listR=listR;
-		 JDialog d = new JDialog(this, "change Weather class"); 
-		 this.setLayout(new BorderLayout());
       road();
       weather();
       ticks();
       aceptar(ctr);
+      cancelar();
       this.setVisible(true);
 		}
 		else {
@@ -51,23 +59,23 @@ public class ChangeWeatherDialog extends JDialog {
 		}
 	}
 	public void aceptar(Controller ctr) {
-		 ok = new JButton();
+		 ok = new JButton("Aceptar");
 			ok.setVisible(true);
-		if(t!=null|| r!=null||w!=null) {
-			Weather weather= Weather.valueOf(w.getText());
-			Pair<String,Weather> p= new Pair<String,Weather>(r.getText(),weather);
-			ws.add(p);
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SetWeatherEvent e = new SetWeatherEvent(Integer.parseInt(t.getText()),ws);
+				if(t!=-1|| r!=null||w!=null) {
+					Weather wea= Weather.valueOf(w);
+					Pair<String,Weather> p= new Pair<String,Weather>(r,wea);
+					ws.add(p);
+				SetWeatherEvent e = new SetWeatherEvent(t,ws);
 				ctr.addEvent(e);
+			}
 			}
 		});
 		add(ok);
-		}
 	}
 	public void cancelar() {
-		salir= new JButton();
+		salir= new JButton("Cancelar");
 		salir.setVisible(true);
 		salir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -78,23 +86,14 @@ public class ChangeWeatherDialog extends JDialog {
 		add(salir);
 	}
 	public void ticks() {
-		ticks = new JSpinner(new SpinnerNumberModel(5, 0, 10000, 100));
-		t=new JTextField();
+		ticks = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 10));
 		ticks.setToolTipText("Ticks");
 		ticks.setMaximumSize(new Dimension(70, 70));
-		ticks.setMinimumSize(new Dimension(70, 70));
-		ticks.setValue(0);
-		ticks.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// Ponemos el valor del JSpinner en el JTextField
-			t.setText(ticks.getValue().toString());
-			}
-		
-		});
+		Jt=new JLabel("Ticks: ", SwingConstants.LEFT);
+		add(Jt);
 		add(ticks);
-		ticks.setVisible(true);
-		add(t);
+		t=Integer.parseInt(ticks.getValue().toString());	
+	
 	}
 	public void road() {
 		String roads[]= new String[listR.size()];
@@ -103,42 +102,24 @@ public class ChangeWeatherDialog extends JDialog {
 		}
 	    SpinnerModel model1 = new SpinnerListModel(roads);
 		road = new JSpinner(model1);
-		r=new JTextField();
 		road.setToolTipText("Road");
 		road.setMaximumSize(new Dimension(70, 70));
-		road.setMinimumSize(new Dimension(70, 70));
-		road.setValue(0);
-		road.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// Ponemos el valor del JSpinner en el JTextField
-			r.setText(road.getValue().toString());
-			}
-		
-		});
+		Jr=new JLabel("Road: ", SwingConstants.LEFT);
+		add(Jr);
 		add(road);
 		road.setVisible(true);
-		add(r);
+		r=road.getValue().toString();
 	}
 	public void weather() {
 		String weathers[]={"SUNNY", "CLOUDY", "RAINY", "WINDY", "STORM"};
 		SpinnerModel model1 = new SpinnerListModel(weathers);
 		weather = new JSpinner(model1);
-		w=new JTextField();
 		weather.setToolTipText("Weather");
 		weather.setMaximumSize(new Dimension(70, 70));
-		weather.setMinimumSize(new Dimension(70, 70));
-		weather.setValue(0);
-		weather.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// Ponemos el valor del JSpinner en el JTextField
-			w.setText(weather.getValue().toString());
-			}
-		
-		});
-		add(weather);
+		Jw=new JLabel("Weather: ", SwingConstants.LEFT);
 		weather.setVisible(true);
-		add(w);
+		add(Jw);
+		add(weather);
+		w=weather.getValue().toString();
 	}
 }

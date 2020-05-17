@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -56,6 +57,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		continuar();
 		pausar();
 		ticks();
+		jt.add(Box.createGlue());
 		salir();
 		jt.setVisible(true);
 		add(jt);
@@ -113,12 +115,13 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 						try {
 						File file= fc.getSelectedFile();
 						ctr.reset();
+						String g= " nu";
 						InputStream input = new FileInputStream(file);
 						ctr.loadEvents(input);
 						
 					}
 						catch(Exception e) {
-							JOptionPane.showMessageDialog(null, "well loaded");
+							JOptionPane.showMessageDialog(null, "ERROR");
 						}
 			}
 			}});
@@ -133,8 +136,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		pausar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int y=Integer.parseInt(ticks.getValue().toString());
-				_stopped=false;
-				enableToolBar(true);
+				_stopped=true;
 				run_sim(y);
 			}
 		});
@@ -150,7 +152,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			public void actionPerformed(ActionEvent arg0) {
 				int y=Integer.parseInt(ticks.getValue().toString());
 				_stopped=false;
-				enableToolBar(true);
+				enableToolBar(false);
 				run_sim(y);
 			}
 		});
@@ -188,16 +190,13 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		// TODO Auto-generated method stub
-		listR= map.getRoads();
-		listV=map.getVehicles();
-		this.time=time;
+		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		listR= map.getRoads();
-		listV=map.getVehicles();
+		listR= null;
+		listV=null;
 		this.time=time;
 		
 	}
@@ -216,7 +215,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		
 	}
 	public void enableToolBar(boolean x) {
-		if(!x) {
+		if(x) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				cambiarC.setEnabled(true);
@@ -259,7 +258,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			}
 			});
 		} else {
-		enableToolBar(false);
+		enableToolBar(true);
 		_stopped = true;
 		}
 		}

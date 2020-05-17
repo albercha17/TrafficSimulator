@@ -118,12 +118,12 @@ public class VehiclesTableModel extends AbstractTableModel  implements TrafficSi
 	}
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		setVehiclessList(map.getVehicles());
+		
 		
 	}
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		setVehiclessList(map.getVehicles());
+		vList=null;
 		
 	}
 	@Override

@@ -114,12 +114,12 @@ public class RoadsTableModel extends AbstractTableModel  implements TrafficSimOb
 	}
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		setRoadsList(map.getRoads());
+		
 		
 	}
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		setRoadsList(map.getRoads());
+		rList=null;
 	}
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {

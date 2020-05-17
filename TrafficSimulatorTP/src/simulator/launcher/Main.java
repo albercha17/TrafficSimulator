@@ -114,7 +114,7 @@ public class Main {
 	}
 	private static void parseMode(CommandLine line) throws ParseException {
 		String x = line.getOptionValue("m");
-		if (x =="gui") mode=true;
+		if (x.equals("gui")) mode=true;
 		else if(x=="console") mode =false; 
 		//else throw new ParseException("The mode is not valid");
 		
@@ -196,8 +196,6 @@ public class Main {
 	private static void start(String[] args) throws IOException {
 		initFactories();
 		parseArgs(args);
-		mode=true;
-		_inFile="resources/examples/ex1.json";
 		if(mode) startGUIMode();
 		else startBatchMode();
 		

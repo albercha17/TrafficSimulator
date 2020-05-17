@@ -2,6 +2,7 @@ package simulator.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -28,18 +30,24 @@ public class ChangeCO2ClassDialog extends JDialog {
 	private int NumContMax= 10;
 	private List<Vehicle> listV;
 	private int time;
+	private JLabel Jt, Jc, Jv;
 	private JSpinner ticks, contClass, vehicle;
-	private JTextField t, c, v;
+	private String v;
+	private int c, t;
 	private JButton ok, salir;
 	private List<Pair<String,Integer>> cs;
 	
 	ChangeCO2ClassDialog(Controller ctr, List<Vehicle> listV, int time){
-		if(!listV.isEmpty()) {
+		if(listV.size()!=0) {
+			this.setLayout(new GridLayout(6,2,5,10));
+			this.setSize(600,300);
+			this.setLocationRelativeTo(null);
+			this.setTitle("change Weather class");
 		this.listV=listV;
 		this.time=time;
+		c=-1;
+		t=-1;
 		cs = new ArrayList<Pair<String,Integer>>();
-		 JDialog d = new JDialog(this, "change Weather class"); 
-		 this.setLayout(new BorderLayout());
       vehicles();
       contClass();
       ticks();
@@ -52,14 +60,14 @@ public class ChangeCO2ClassDialog extends JDialog {
 		}
 	}
 	public void aceptar(Controller ctr) {
-		 ok = new JButton();
+		 ok = new JButton("Aceptar");
 		ok.setVisible(true);
-		if(t!=null|| c!=null||v!=null) {
-		Pair<String,Integer> p= new Pair<String,Integer>(v.getText(),Integer.parseInt(c.getText()));
+		if(t!=-1|| c!=-1||v!=null) {
+		Pair<String,Integer> p= new Pair<String,Integer>(v,c);
 		cs.add(p);
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				NewSetContClassEvent e = new NewSetContClassEvent(Integer.parseInt(t.getText()),cs);
+				NewSetContClassEvent e = new NewSetContClassEvent(t,cs);
 				ctr.addEvent(e);
 			}
 		});
@@ -67,7 +75,7 @@ public class ChangeCO2ClassDialog extends JDialog {
 		}
 	}
 	public void cancelar() {
-		salir= new JButton();
+		salir= new JButton("Cancelar");
 		salir.setVisible(true);
 		salir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -78,21 +86,12 @@ public class ChangeCO2ClassDialog extends JDialog {
 		add(salir);
 	}
 	public void ticks() {
-		ticks = new JSpinner(new SpinnerNumberModel(5, 0, 10000, 100));
-		t=new JTextField();
+		ticks = new JSpinner(new SpinnerNumberModel(0, 0, 10000, 10));
 		ticks.setToolTipText("Ticks");
 		ticks.setMaximumSize(new Dimension(70, 70));
-		ticks.setMinimumSize(new Dimension(70, 70));
-		ticks.setValue(0);
-		ticks.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// Ponemos el valor del JSpinner en el JTextField
-			t.setText(ticks.getValue().toString());
-			}
-		
-		});
-		add(t);
+		t=Integer.parseInt(ticks.getValue().toString());
+		Jt=new JLabel("ticks: ", SwingConstants.CENTER);
+		add(Jt);
 		add(ticks);
 	}
 	
@@ -103,38 +102,20 @@ public class ChangeCO2ClassDialog extends JDialog {
 		}
 	    SpinnerModel model1 = new SpinnerListModel(vehicles);
 		vehicle = new JSpinner(model1);
-		v=new JTextField();
 		vehicle.setToolTipText("Vehicle");
 		vehicle.setMaximumSize(new Dimension(70, 70));
-		vehicle.setMinimumSize(new Dimension(70, 70));
-		vehicle.setValue(0);
-		vehicle.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// Ponemos el valor del JSpinner en el JTextField
-			v.setText(vehicle.getValue().toString());
-			}
-		
-		});
+		v=vehicle.getValue().toString();
+		Jv=new JLabel("V: ", SwingConstants.CENTER);
+		add(Jv);
 		add(vehicle);
-		add(v);
 	}
 	public void contClass() {
-		contClass = new JSpinner(new SpinnerNumberModel(5, 0, 10, 100));
-		c=new JTextField();
+		contClass = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
 		contClass.setToolTipText("CO2 Class");
 		contClass.setMaximumSize(new Dimension(70, 70));
-		contClass.setMinimumSize(new Dimension(70, 70));
-		contClass.setValue(0);
-		contClass.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				// Ponemos el valor del JSpinner en el JTextField
-			c.setText(contClass.getValue().toString());
-			}
-		
-		});
-		add(c);
+		c=Integer.parseInt(contClass.getValue().toString());
+		Jc=new JLabel("Cont: ", SwingConstants.CENTER);
+		add(Jc);
 		add(contClass);
-	}
+}
 }
