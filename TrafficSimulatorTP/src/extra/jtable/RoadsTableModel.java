@@ -20,7 +20,7 @@ public class RoadsTableModel extends AbstractTableModel  implements TrafficSimOb
 	
 	
 	private List<Road> rList;
-	private String[] _colNames = { "ID","Status", "Lenght", "Weather","Max Speed", "Speed","Total Cont", "Distance" };
+	private String[] _colNames = { "ID", "Lenght", "Weather","Max Speed", "Speed","Total Cont", "Distance" };
 	
 	public RoadsTableModel(Controller ctr) {
 		ctr.addObserver(this);

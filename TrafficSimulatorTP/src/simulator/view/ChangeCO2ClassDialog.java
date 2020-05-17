@@ -34,7 +34,7 @@ public class ChangeCO2ClassDialog extends JDialog {
 	private List<Pair<String,Integer>> cs;
 	
 	ChangeCO2ClassDialog(Controller ctr, List<Vehicle> listV, int time){
-		if(listV.size()!=0) {
+		if(!listV.isEmpty()) {
 		this.listV=listV;
 		this.time=time;
 		cs = new ArrayList<Pair<String,Integer>>();

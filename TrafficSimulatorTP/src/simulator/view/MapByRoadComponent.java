@@ -72,7 +72,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver {
 
 			// donde ​x1=50​, ​x2=getWidth()-100​ y ​y=(i+1)*50​
 			int x1 = 50;
-			int y = (i+1)*50;
+			int y = (i+1)*100;
 			int x2 = getWidth()-100;
 			// choose a color for the arrow depending on the traffic light of the road
 			Color arrowColor = _RED_LIGHT_COLOR;
@@ -92,53 +92,43 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver {
 			
 			g.drawLine(x1, y, x2, y);
 			g.setColor(Color.BLUE);
-			g.fillOval(x1, y, 60, 60);
+			g.fillOval(x1, y, 10, 10);
 			g.setColor(arrowColor);
-			g.fillOval(x2, y, 60, 60);
+			g.fillOval(x2, y, 10, 10);
 			
 			// crear vehiculo
 			for(Vehicle v : r.getV()) {
 				
 				int x=x1 + (int) ((x2 - x1) * ((double) v.getL() / (double) r.getLongitud()));	
-				ImageIcon Img = new ImageIcon(getClass().getResource("resources/icons/car.png")); 
-				g.drawImage(Img.getImage(), x, y,16, 16, null);
 				g.drawString(v.getId(), x, y - 6);
+				ImageIcon Img= new ImageIcon("resources/icons/car.png");
+				g.drawImage(Img.getImage(), x, y,16, 16, null);
+				
 				 
 			}
-			g.drawString(r.getId(), x1-6, y);
+			g.drawString(r.getId(), x1-10, y);
 			g.drawString(r.getini().getId(), x1, y-6);
 			g.drawString(r.getFin().getId(), x2, y-6);
 			
 			// imagen segun el tiempo
 			ImageIcon Img2 = null;
-			if(r.getWeather()=="SUNNY")
-			Img2 = new ImageIcon(getClass().getResource("resources/icons/sun.png")); 
-			else if(r.getWeather()=="CLOUDY")
-			Img2 = new ImageIcon(getClass().getResource("resources/icons/cloud.png")); 
-			else if(r.getWeather()=="RAINY")
-			Img2 = new ImageIcon(getClass().getResource("resources/icons/rain.png")); 
-			else if(r.getWeather()=="WINDY")
-			Img2 = new ImageIcon(getClass().getResource("resources/icons/wind.png"));
-			else if(r.getWeather()=="STORM")
-			Img2 = new ImageIcon(getClass().getResource("resources/icons/storm.png")); 
+			if(r.getWeather()=="SUNNY")Img2= new ImageIcon("resources/icons/sun.png");
+			else if(r.getWeather()=="CLOUDY")Img2= new ImageIcon("resources/icons/cloud.png");
+			else if(r.getWeather()=="RAINY")Img2= new ImageIcon("resources/icons/rain.png"); 
+			else if(r.getWeather()=="WINDY")Img2= new ImageIcon("resources/icons/wind.png");
+			else if(r.getWeather()=="STORM")Img2= new ImageIcon("resources/icons/storm.png"); 
 			g.drawImage(Img2.getImage(), x2+6, y,32, 32, null);
 			  
 			
 			// imagen segun la contaminacion
 			ImageIcon Img3 = null;
 			int c = ( int ) Math.floor(Math.min(( double ) r.getTotalC()/(1.0 + ( double ) r.getCO2()),1.0) / 0.19);
-			if(c==0)
-			Img3 = new ImageIcon(getClass().getResource("resources/icons/cont_0.png")); 
-			else if(c==1)
-			Img3 = new ImageIcon(getClass().getResource("resources/icons/cont_1.png")); 
-			else if(c==2)
-			Img3 = new ImageIcon(getClass().getResource("resources/icons/cont_2.png")); 
-			else if(c==3)
-			Img3 = new ImageIcon(getClass().getResource("resources/icons/cont_3.png"));
-			else if(c==4)
-			Img3 = new ImageIcon(getClass().getResource("resources/icons/cont_4.png")); 
-			else if(c==5)
-				Img3 = new ImageIcon(getClass().getResource("resources/icons/cont_5.png")); 
+			if(c==0) Img3= new ImageIcon("resources/icons/cont_0.png"); 
+			else if(c==1) Img3= new ImageIcon("resources/icons/cont_1.png");  
+			else if(c==2) Img3= new ImageIcon("resources/icons/cont_2.png");  
+			else if(c==3)Img3= new ImageIcon("resources/icons/cont_3.png"); 
+			else if(c==4)Img3= new ImageIcon("resources/icons/cont_4.png");  
+			else if(c==5)Img3= new ImageIcon("resources/icons/cont_5.png"); 
 			g.drawImage(Img3.getImage(), x2+40, y,32, 32, null);
 			
 			i++;

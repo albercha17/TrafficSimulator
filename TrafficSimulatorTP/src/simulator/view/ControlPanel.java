@@ -133,7 +133,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		pausar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int y=Integer.parseInt(ticks.getValue().toString());
-				_stopped=true;
+				_stopped=false;
+				enableToolBar(true);
 				run_sim(y);
 			}
 		});
@@ -149,8 +150,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			public void actionPerformed(ActionEvent arg0) {
 				int y=Integer.parseInt(ticks.getValue().toString());
 				_stopped=false;
+				enableToolBar(true);
 				run_sim(y);
-				ctr.run(y);
 			}
 		});
 		jt.add(continuar);
@@ -242,7 +243,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			} catch (Exception e) {
 		// TODO show error message
 				_stopped = true;
-				enableToolBar(true);
+				enableToolBar(false);
 				return;
 			}
 			SwingUtilities.invokeLater(new Runnable() {
