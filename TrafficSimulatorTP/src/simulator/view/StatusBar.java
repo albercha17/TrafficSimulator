@@ -46,7 +46,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver {
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
 		String x=e.toString();
 		this.time.setText(String.valueOf("Time: " + time));
-		Event.setText("Event added " + e.toString());
+		Event.setText("Event added " + x);
 		
 	}
 
